@@ -1,0 +1,23 @@
+klee --max-time=30s /workspace/RevEngCode/combined.bc
+PID: 100
+Using monotonic steady clock with 1/1000000000s resolution
+Started: 2026-04-26 18:31:54
+BEGIN searcher description
+<InterleavedSearcher> containing 2 searchers:
+RandomPathSearcher
+WeightedRandomSearcher::CoveringNew
+</InterleavedSearcher>
+END searcher description
+Finished: 2026-04-26 18:32:25
+Elapsed: 00:00:31
+KLEE: done: explored paths = 876
+KLEE: done: avg. constructs per query = 149
+KLEE: done: total queries = 876
+KLEE: done: valid queries = 0
+KLEE: done: invalid queries = 876
+KLEE: done: query cex = 876
+
+KLEE: done: total instructions = 33169
+KLEE: done: completed paths = 0
+KLEE: done: partially completed paths = 876
+KLEE: done: generated tests = 876

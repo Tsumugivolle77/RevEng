@@ -1,0 +1,4 @@
+anthropic
+tree-sitter
+tree-sitter-c
+python-dotenv
