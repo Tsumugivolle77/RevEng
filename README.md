@@ -23,7 +23,7 @@ Input: two C functions f and f'
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/你的用户名/RevEng.git
+git clone https://github.com/Tsumugivolle77/RevEng.git
 cd RevEng
 ```
 
