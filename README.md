@@ -109,6 +109,7 @@ RevEng/
 - [x] Function signature parsing (Tree-sitter)
 - [x] LLM-based harness generation (Claude API)
 - [x] End-to-end demo pipeline
+- [ ] Support ChatGPT, Gemini,... APIs for reusability
 - [ ] Support for more complex types (structs, arrays, pointers)
 - [ ] Automated evaluation against benchmark datasets
 - [ ] Result visualization and reporting
