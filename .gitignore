@@ -1,2 +1,9 @@
 .env
+.conda
+.vscode
+
+build/
 klee/
+RevEngCode/klee-last/
+RevEngCode/klee-out-*/
+RevEngCode/src/__pycache__/
