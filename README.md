@@ -112,3 +112,5 @@ RevEng/
 - [ ] Support for more complex types (structs, arrays, pointers)
 - [ ] Automated evaluation against benchmark datasets
 - [ ] Result visualization and reporting
+- [ ] Add GUI support
+- [ ] Add new language support
