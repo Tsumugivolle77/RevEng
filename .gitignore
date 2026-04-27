@@ -2,10 +2,16 @@
 .conda
 .vscode
 
-build/
-klee/
-RevEngCode/klee-last/
+build
+klee
+RevEngCode/klee-last
 RevEngCode/klee-out-*
-RevEngCode/src/__pycache__/
+RevEngCode/src/__pycache__
 
 add_to_ignore.sh
+
+# Resulting files from KLEE
+RevEngCode/functions/combined.bc
+RevEngCode/functions/harness.bc
+RevEngCode/functions/f_prime.bc
+RevEngCode/functions/f.bc
