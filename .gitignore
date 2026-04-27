@@ -5,7 +5,7 @@
 build/
 klee/
 RevEngCode/klee-last/
-RevEngCode/klee-out-*/
+RevEngCode/klee-out-*
 RevEngCode/src/__pycache__/
 
 add_to_ignore.sh
