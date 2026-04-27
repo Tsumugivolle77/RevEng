@@ -4,20 +4,17 @@ from dotenv import load_dotenv
 from parse_signature import parse_function_signature
 from generate_harness import generate_and_validate
 
-# 基于当前文件位置计算路径
-# src/main.py -> RevEngCode/
 SRC_DIR = os.path.dirname(os.path.abspath(__file__))
 REVENGCODE_DIR = os.path.dirname(SRC_DIR)
 REVENG_DIR = os.path.dirname(REVENGCODE_DIR)
 
-# 加载.env（在RevEng根目录下）
 load_dotenv(dotenv_path=os.path.join(REVENG_DIR, ".env"))
 
 DOCKER_WORKSPACE = "/workspace/RevEngCode"
 
 
 def compile_all():
-    print("=== 编译所有文件 ===")
+    print("=== Compiling all files ===")
     
     files = [
         ("functions/f.c", "f.bc"),
@@ -34,12 +31,11 @@ def compile_all():
             capture_output=True, text=True
         )
         if result.returncode != 0:
-            print(f"❌ 编译 {src} 失败:")
+            print(f"[FAILED] Compilation of {src} failed:")
             print(result.stderr)
             return False
-        print(f"✅ {src} 编译成功")
+        print(f"[OK] {src} compiled successfully")
     
-    # 链接
     result = subprocess.run(
         ["docker", "exec", "klee_demo",
          "llvm-link",
@@ -51,16 +47,16 @@ def compile_all():
     )
     
     if result.returncode != 0:
-        print("❌ 链接失败:")
+        print("[FAILED] Linking failed:")
         print(result.stderr)
         return False
     
-    print("✅ 链接成功")
+    print("[OK] Linking succeeded")
     return True
 
 
 def run_klee():
-    print("\n=== 运行KLEE ===")
+    print("\n=== Running KLEE ===")
     result = subprocess.run(
         ["docker", "exec", "klee_demo",
          "klee", "--max-time=30s",
@@ -73,7 +69,7 @@ def run_klee():
 
 
 def parse_results():
-    print("\n=== 分析结果 ===")
+    print("\n=== Analyzing results ===")
     result = subprocess.run(
         ["docker", "exec", "klee_demo",
          "bash", "-c",
@@ -85,26 +81,26 @@ def parse_results():
     test_count = sum(1 for f in files if f.endswith('.ktest'))
     error_count = sum(1 for f in files if f.endswith('.err'))
     
-    print(f"生成测试用例：{test_count} 个")
+    print(f"Test cases generated: {test_count}")
     
     if error_count > 0:
-        print(f"⚠️  发现 {error_count} 个断言失败，两函数行为不一致！")
+        print(f"[WARNING] {error_count} assertion failure(s) found: functions behave differently!")
     else:
-        print("✅ 未发现差异，两函数行为一致")
+        print("[OK] No differences found: functions are behaviorally equivalent")
 
 
 def run_pipeline(f_path: str, f_prime_path: str):
-    print("=== 解析函数签名 ===")
+    print("=== Parsing function signatures ===")
     
     with open(f_path) as file:
         sig_f = parse_function_signature(file.read())
     with open(f_prime_path) as file:
         sig_f_prime = parse_function_signature(file.read())
     
-    print(f"函数1：{sig_f}")
-    print(f"函数2：{sig_f_prime}")
+    print(f"Function 1: {sig_f}")
+    print(f"Function 2: {sig_f_prime}")
     
-    print("\n=== 生成Harness ===")
+    print("\n=== Generating harness ===")
     generate_and_validate(sig_f, sig_f_prime)
     
     if not compile_all():

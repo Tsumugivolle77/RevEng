@@ -2,8 +2,6 @@ import anthropic
 import subprocess
 import os
 
-# 基于当前文件位置计算项目根目录
-# src/generate_harness.py -> RevEngCode/
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HARNESS_PATH = os.path.join(BASE_DIR, "harness.c")
 DOCKER_WORKSPACE = "/workspace/RevEngCode"
@@ -70,15 +68,13 @@ def generate_harness(sig_f: dict, sig_f_prime: dict) -> str:
 
 def generate_and_validate(sig_f: dict, sig_f_prime: dict, max_retries: int = 3) -> str:
     for attempt in range(max_retries):
-        print(f"第{attempt + 1}次生成harness...")
+        print(f"Attempt {attempt + 1}: generating harness...")
         code = generate_harness(sig_f, sig_f_prime)
         
-        # 写入宿主机文件
         with open(HARNESS_PATH, "w") as f:
             f.write(code)
-        print(f"Harness写入：{HARNESS_PATH}")
+        print(f"Harness written to: {HARNESS_PATH}")
         
-        # 在Docker内编译验证
         result = subprocess.run(
             ["docker", "exec", "klee_demo",
              "clang", "-emit-llvm", "-c", "-g", "-O0",
@@ -88,10 +84,10 @@ def generate_and_validate(sig_f: dict, sig_f_prime: dict, max_retries: int = 3) 
         )
         
         if result.returncode == 0:
-            print(f"✅ 第{attempt + 1}次生成成功，编译通过")
+            print(f"[OK] Attempt {attempt + 1} succeeded: harness compiled successfully")
             return code
         else:
-            print(f"⚠️  编译失败，重试...")
+            print(f"[FAILED] Compilation failed, retrying...")
             print(result.stderr)
     
-    raise Exception("多次生成均失败")
+    raise Exception("Harness generation failed after maximum retries")
